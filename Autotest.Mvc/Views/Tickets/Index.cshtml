@@ -1,11 +1,12 @@
 ﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model DataBase.Entietes.User
-
+@{ int i = 1;}
 @foreach (var ticket in Model.Tickets)
 {
+    
     <div class="card w3-card">
         <div class="card-body">
-            <h4 class="card-title w3-card">Ticket @(ticket.Id + 1)</h4>
+            <h4 class="card-title w3-card">Ticket @(i)</h4>
             
             @if (ticket.Answers.Count > 0)
             {
@@ -16,4 +17,5 @@
             <a asp-controller="Tickets" asp-action="StartTicket" asp-route-ticketIndex="@ticket.Id" style="color:aqua">Start</a>
         </div>
     </div>
+    i++;
 }

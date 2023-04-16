@@ -21,7 +21,16 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        return View();
+        if (!_usersService.IsLoggedIn(HttpContext))
+        {
+            return View();
+        }
+        else
+        {
+            var userId = HttpContext.Request.Cookies["user_id"];
+            var user = _userRepository.GetUserById(userId!);
+            return RedirectToAction("Dashboard");
+        }
     }
 
     public IActionResult Privacy()
@@ -47,5 +56,22 @@ public class HomeController : Controller
             var user = _userRepository.GetUserById(userId!);
             return View(user);
         }
+    }
+
+    public IActionResult TicketResults()
+    {
+        var user = _usersService.GetCurrentUser(HttpContext);
+
+        if (user == null)
+        {
+            return RedirectToAction("SignUp","Users");
+        }
+
+        return View(user);
+    }
+
+    public IActionResult About()
+    {
+        return View();
     }
 }

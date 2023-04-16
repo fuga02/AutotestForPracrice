@@ -1,0 +1,28 @@
+﻿@model DataBase.Entietes.User
+<h1>Ticket Results</h1>
+
+<table class="table">
+    <thead>
+    <tr style="color: antiquewhite" >
+        <th scope="col">#</th>
+        <th scope="col">Ticket Index</th>
+        <th scope="col">Correct Count</th>
+        <th scope="col">Question Count</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+    @for (int i=0; i < Model.Tickets.Count; i++)
+    {
+        var ticketResult = Model.Tickets[i];
+
+        <tr style="color: antiquewhite" >
+            <th scope="row">@(i+1)</th>
+            <td>@(i+1)</td>
+            <td>@ticketResult.CorrectCount</td>
+            <td>@ticketResult.QuestionsCount</td>
+        </tr>
+    }
+
+    </tbody>
+</table>
