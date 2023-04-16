@@ -13,7 +13,8 @@ namespace DataBase.Extensions;
                 Password = reader.GetString(2),
                 Name = reader.GetString(3),
                 PhotoPath = reader.GetString(4),
-                CurrentTicketIndex = reader.GetInt32(5)
+                CurrentTicketIndex = reader.GetInt32(5),
+                Language = reader.GetString(6),
             };
         }
         public static Ticket GetTicket(this SqliteDataReader reader)

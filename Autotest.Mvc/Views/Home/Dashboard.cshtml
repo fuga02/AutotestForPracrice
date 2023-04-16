@@ -1,5 +1,8 @@
-﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+﻿@using Autotest.Mvc.Repositories
+@using Autotest.Mvc.Services
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model DataBase.Entietes.User
+@inject QuestionService QuestionService
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 <body>
 <div class="container">
@@ -23,36 +26,42 @@
                 var bg = "";
                 var bg1 = "";
                 var bg2 = "";
-                    if (@Model.Language == "uzb")
-                    {
-                        bg ="color: red";
-                         bg1 = "";
-                        bg2 = "";
-                    }
-                    if (@Model.Language == "rus")
-                    {
-                        bg1 = "color: red";
-                        bg = "";
-                        bg2 = "";
-                    }
-                    if (@Model.Language == "krill")
-                    {
-                        bg2 = "color: red";
-                        bg = "";
-                        bg1 = "";
-                    }
+                if (Model.Language == "uzb")
+                {
+                    bg = "color: red";
+                    bg1 = "";
+                    bg2 = "";
                 }
-            
+                if (Model.Language == "rus")
+                {
+                    bg1 = "color: red";
+                    bg = "";
+                    bg2 = "";
+                }
+                if (Model.Language == "krill")
+                {
+                    bg2 = "color: red";
+                    bg = "";
+                    bg1 = "";
+                }
+            }
+
             <a style="@bg" asp-controller="Users" asp-action="ChangeLanguage" asp-route-language="uzb">Uzbek</a>
             <a style="@bg1" asp-controller="Users" asp-action="ChangeLanguage" asp-route-language="rus">Russian </a>
             <a style="@bg2" asp-controller="Users" asp-action="ChangeLanguage" asp-route-language="krill">Krill</a>
         </li>
     </ul>
     <div class="profile-menu">
-        <p>Me <a asp-controller="Users" asp-action="Profile"><span class="entypo-down-open scnd-font-color">
-        <div   class="profile-picture small-profile-picture">
-            <img  width="40px" alt="Anne Hathaway picture" src="@Model.PhotoPath">
-        </div></span></a></p>
+        <p>
+            Me
+            <a asp-controller="Users" asp-action="Profile">
+                <span class="entypo-down-open scnd-font-color">
+                    <div class="profile-picture small-profile-picture">
+                        <img width="40px" alt="Anne Hathaway picture" src="@Model.PhotoPath">
+                    </div>
+                </span>
+            </a>
+        </p>
     </div>
 </header>
 
@@ -63,34 +72,33 @@
         <h2 class="titular">MENU BOX</h2>
         <ul class="menu-box-menu">
             <li>
-                <a class="menu-box-tab" asp-controller="Home" asp-action="Index"><span class="icon fontawesome-envelope scnd-font-color"></span>Home
-                    <div class="menu-box-number"></div></a>
-            </li>@*
+                <a class="menu-box-tab" asp-controller="Home" asp-action="Index">
+                    <span class="icon fontawesome-envelope scnd-font-color"></span>Home
+                    <div class="menu-box-number"></div>
+                </a>
+            </li>
             <li>
-                <a class="menu-box-tab" asp-controller="Users" asp-action="LanguagePost"><span class="icon entypo-paper-plane scnd-font-color"></span>Tickets
-                    <div class="menu-box-number"></div></a>
-            </li>*@
-            <li>
-                <a class="menu-box-tab" href="#10"><span class="icon entypo-calendar scnd-font-color"></span>Events
+                <a class="menu-box-tab" asp-controller="Tickets" asp-action="Index"><span class="icon entypo-paper-plane scnd-font-color"></span>Start Ticket
                     <div class="menu-box-number"></div></a>
             </li>
             <li>
                 <a class="menu-box-tab" asp-controller="Users" asp-action="Profile"><span class="icon entypo-cog scnd-font-color"></span>Account Settings</a>
             </li>
             <li>
-                <a class="menu-box-tab" href="#13">
-                    <sapn class="icon entypo-chart-line scnd-font-color"></sapn>Statistics
-                </a>
+                <a class="menu-box-tab" asp-controller="Home" asp-action="TicketResults"><span class="icon entypo-cog scnd-font-color"></span>Statistics</a>
+            </li>
+            <li>
+                <a class="menu-box-tab" asp-controller="Home" asp-action="About"><span class="icon entypo-cog scnd-font-color"></span>About</a>
             </li>
         </ul>
     </div>
     <div class="donut-chart-block block">
         <!-- DONUT CHART BLOCK (LEFT-CONTAINER) -->
-        <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+        <canvas id="myChart" style="max-width: 600px; width: 100%;"></canvas>
 
         <script>
         var xValues = ["Jami to'gri ishlangan savollar foizi", "Jami xatolar foizi"];
-        @*var yValues = [@(Math.Round(CalculateCorrectCount.Calculate()*1.0 / 9)), @(Math.Round((CalculateCorrectCount.Calculate()-900)*(-1.0)/9))];*@
+        var yValues = [(@Model.Tickets.Sum(t=>t.CorrectCount) / @QuestionService.Questions.Count)/9,(900-@Model.Tickets.Sum(t=>t.CorrectCount) / @QuestionService.Questions.Count)/9 ];
         var barColors = [
           "#b91d47",
           "#00aba9",
@@ -118,32 +126,44 @@
         </script>
         <!-- LINE CHART BLOCK (LEFT-CONTAINER) -->
         <div class="line-chart">
-            <div class='grafico'>
-                <ul class='eje-y'>
-                    <li data-ejeY='30'></li>
-                    <li data-ejeY='20'></li>
-                    <li data-ejeY='10'></li>
-                    <li data-ejeY='0'></li>
+            <div class="grafico">
+                <ul class="eje-y">
+                    <li data-ejeY="30"></li>
+                    <li data-ejeY="20"></li>
+                    <li data-ejeY="10"></li>
+                    <li data-ejeY="0"></li>
                 </ul>
-                <ul class='eje-x'>
+                <ul class="eje-x">
                     <li>Apr</li>
                     <li>May</li>
                     <li>Jun</li>
                 </ul>
-                <span data-valor='25'>
-                    <span data-valor='8'>
-                        <span data-valor='13'>
-                            <span data-valor='5'>
-                                <span data-valor='23'>
-                                    <span data-valor='12'>
-                                        <span data-valor='15'>
-                                        </span></span></span></span></span></span></span>
+                <span data-valor="25">
+                    <span data-valor="8">
+                        <span data-valor="13">
+                            <span data-valor="5">
+                                <span data-valor="23">
+                                    <span data-valor="12">
+                                        <span data-valor="15">
+                                        </span>
+                                    </span>
+                                </span>
+                            </span>
+                        </span>
+                    </span>
+                </span>
             </div>
         </div>
         <ul class="time-lenght horizontal-list">
-            <li><a class="time-lenght-btn" href="#14">Week</a></li>
-            <li><a class="time-lenght-btn" href="#15">Month</a></li>
-            <li><a class="time-lenght-btn" href="#16">Year</a></li>
+            <li>
+                <a class="time-lenght-btn" href="#14">Week</a>
+            </li>
+            <li>
+                <a class="time-lenght-btn" href="#15">Month</a>
+            </li>
+            <li>
+                <a class="time-lenght-btn" href="#16">Year</a>
+            </li>
         </ul>
         <ul class="month-data clear">
             <li>
@@ -163,31 +183,47 @@
     <div class="media block">
         <!-- MEDIA (LEFT-CONTAINER) -->
         <div id="media-display">
-            <a class="media-btn play" href="#23"><span class="fontawesome-play"></span></a>
+            <a class="media-btn play" href="#23">
+                <span class="fontawesome-play"></span>
+            </a>
         </div>
         <div class="media-control-bar">
-            <a class="media-btn play" href="#23"><span class="fontawesome-play scnd-font-color"></span></a>
+            <a class="media-btn play" href="#23">
+                <span class="fontawesome-play scnd-font-color"></span>
+            </a>
             <p class="time-passed">4:15 <span class="time-duration scnd-font-color">/ 9:23</span></p>
-            <a class="media-btn volume" href="#24"><span class="fontawesome-volume-up scnd-font-color"></span></a>
-            <a class="media-btn resize" href="#25"><span class="fontawesome-resize-full scnd-font-color"></span></a>
+            <a class="media-btn volume" href="#24">
+                <span class="fontawesome-volume-up scnd-font-color"></span>
+            </a>
+            <a class="media-btn resize" href="#25">
+                <span class="fontawesome-resize-full scnd-font-color"></span>
+            </a>
         </div>
     </div>
     <ul class="social horizontal-list block">
         <!-- SOCIAL (LEFT-CONTAINER) -->
         <li class="facebook">
-            <p class="icon"><span class="zocial-facebook"></span></p>
+            <p class="icon">
+                <span class="zocial-facebook"></span>
+            </p>
             <p class="number">248k</p>
         </li>
         <li class="twitter">
-            <p class="icon"><span class="zocial-twitter"></span></p>
+            <p class="icon">
+                <span class="zocial-twitter"></span>
+            </p>
             <p class="number">30k</p>
         </li>
         <li class="googleplus">
-            <p class="icon"><span class="zocial-googleplus"></span></p>
+            <p class="icon">
+                <span class="zocial-googleplus"></span>
+            </p>
             <p class="number">124k</p>
         </li>
         <li class="mailbox">
-            <p class="icon"><span class="fontawesome-envelope"></span></p>
+            <p class="icon">
+                <span class="fontawesome-envelope"></span>
+            </p>
             <p class="number">89k</p>
         </li>
     </ul>
@@ -197,7 +233,9 @@
 <div class="middle-container container">
     <div class="profile block">
         <!-- PROFILE (MIDDLE-CONTAINER) -->
-        <a class="add-button" href="#28"><span class="icon entypo-plus scnd-font-color"></span></a>
+        <a class="add-button" href="#28">
+            <span class="icon entypo-plus scnd-font-color"></span>
+        </a>
         <div class="profile-picture big-profile-picture clear">
             <img width="150px" alt="@Model.Name" src="@Model.PhotoPath">
         </div>
@@ -209,15 +247,18 @@
             <li>
                 <a class="comments" href="#40">
                     <p><span class="icon fontawesome-comment-alt scnd-font-color"></span>23</p>
-                </a></li>
+                </a>
+            </li>
             <li>
                 <a class="views" href="#41">
                     <p><span class="icon fontawesome-eye-open scnd-font-color"></span>841</p>
-                </a></li>
+                </a>
+            </li>
             <li>
                 <a class="likes" href="#42">
                     <p><span class="icon fontawesome-heart-empty scnd-font-color"></span>49</p>
-                </a></li>
+                </a>
+            </li>
         </ul>
     </div>
     <div class="weather block clear">
@@ -230,72 +271,88 @@
         <ul class="next-days">
             <li>
                 <a href="#43">
-                    <p class="next-days-date"><span class="day">SAT</span> <span class="scnd-font-color">29/06</span></p>
+                    <p class="next-days-date">
+                        <span class="day">SAT</span> <span class="scnd-font-color">29/06</span>
+                    </p>
                     <p class="next-days-temperature">25º<span class="icon icon-cloudy scnd-font-color"></span></p>
                 </a>
             </li>
             <li>
                 <a href="#44">
-                    <p class="next-days-date"><span class="day">SUN</span> <span class="scnd-font-color">30/06</span></p>
+                    <p class="next-days-date">
+                        <span class="day">SUN</span> <span class="scnd-font-color">30/06</span>
+                    </p>
                     <p class="next-days-temperature">22º<span class="icon icon-cloudy2 scnd-font-color"></span></p>
                 </a>
             </li>
             <li>
                 <a href="#45">
-                    <p class="next-days-date"><span class="day">MON</span> <span class="scnd-font-color">01/07</span></p>
+                    <p class="next-days-date">
+                        <span class="day">MON</span> <span class="scnd-font-color">01/07</span>
+                    </p>
                     <p class="next-days-temperature">24º<span class="icon icon-cloudy2 scnd-font-color"></span></p>
                 </a>
             </li>
             <li>
                 <a href="#46">
-                    <p class="next-days-date"><span class="day">TUE</span> <span class="scnd-font-color">02/07</span></p>
+                    <p class="next-days-date">
+                        <span class="day">TUE</span> <span class="scnd-font-color">02/07</span>
+                    </p>
                     <p class="next-days-temperature">26º<span class="icon icon-cloudy scnd-font-color"></span></p>
                 </a>
             </li>
             <li>
                 <a href="">
-                    <p class="next-days-date"><span class="day">WED</span> <span class="scnd-font-color">03/07</span></p>
+                    <p class="next-days-date">
+                        <span class="day">WED</span> <span class="scnd-font-color">03/07</span>
+                    </p>
                     <p class="next-days-temperature">27º<span class="icon icon-sun scnd-font-color"></span></p>
                 </a>
             </li>
             <li>
                 <a href="">
-                    <p class="next-days-date"><span class="day">THU</span> <span class="scnd-font-color">04/07</span></p>
+                    <p class="next-days-date">
+                        <span class="day">THU</span> <span class="scnd-font-color">04/07</span>
+                    </p>
                     <p class="next-days-temperature">29º<span class="icon icon-sun scnd-font-color"></span></p>
                 </a>
             </li>
         </ul>
     </div>
     <div class="tweets block">
-        <!-- TWEETS (MIDDLE-CONTAINER) -->
-        <h2 class="titular"><span class="icon zocial-twitter"></span>LATEST TWEETS</h2>
-        <div class="tweet first">
-            <p>Ice-cream trucks only play music when out of ice-cream. Well played dad. On <a class="tweet-link" href="#17">@@Quora</a></p>
-            <p><a class="time-ago scnd-font-color" href="#18">3 minutes ago</a></p>
+        <p style="margin: auto; color: aqua; font-size: 25px"><b>About my results</b></p>
+        <br/>
+        <h1>TotalCorrect: @Model.Tickets.Sum(t=>t.CorrectCount) / @QuestionService.Questions.Count</h1>
+        <h1>TotalFinishedTickets: @Model.Tickets.Count(t=>t.IsCompleted) / @QuestionService.TicketsCount</h1>
+
+        @{
+            var lastWeek = Model.Tickets
+                .Where(t => t.Date > DateTime.Now.AddDays(2))
+                .Sum(t => t.CorrectCount);
+        }
+
+        <h1>Last week : @lastWeek</h1>
+
+        @{
+            var ticket = Model.Tickets.MaxBy(t => t.Date);
+        }
+
+        <div class="card w3-card "  >
+            <div class="card-body "  >
+                <h4 class="card-title w3-card"  >Ticket @(ticket.Id + 1)</h4>
+            
+                @if (ticket.Answers.Count > 0)
+                {
+                    <p class="card-text w3-card">@ticket.CorrectCount / @ticket.QuestionsCount</p>
+                    <p class="card-text w3-card">@ticket.Date.ToString("f")</p>
+                }
+
+                <a asp-controller="Tickets" asp-action="StartTicket" asp-route-ticketIndex="@ticket.Id" style="color:crimson">Start</a>
+            </div>
         </div>
-        <div class="tweet">
-            <p>We are in the process of pushing out all of the new CC apps! We will tweet again once they are live <a class="tweet-link" href="#19">#CreativeCloud</a></p>
-            <p><a class="scnd-font-color" href="#20">6 hours ago</a></p>
-        </div>
+
     </div>
-    <ul class="social block">
-        <!-- SOCIAL (MIDDLE-CONTAINER) -->
-        <li>
-            <a href="#50">
-                <div class="facebook icon"><span class="zocial-facebook"></span></div>
-                <h2 class="facebook titular">SHARE TO FACEBOOK</h2>
-            </a></li>
-        <li>
-            <a href="#51">
-                <div class="twitter icon"><span class="zocial-twitter"></span></div>
-                <h2 class="twitter titular">SHARE TO TWITTER</h2>
-            </a></li>
-        <li>
-            <a href="#52">
-                <div class="googleplus icon"><span class="zocial-googleplus"></span></div>
-                <h2 class="googleplus titular">SHARE TO GOOGLE+</h2>
-            </a></li>
-    </ul>
+   
 </div>
 
 <!-- RIGHT-CONTAINER -->
@@ -305,26 +362,27 @@
         <h2 class="titular">JOIN THE NEWSLETTER</h2>
         <div class="input-container">
             <input type="text" placeholder="yourname@gmail.com" class="email text-input">
-            <div class="input-icon envelope-icon-newsletter"><span class="fontawesome-envelope scnd-font-color"></span></div>
+            <div class="input-icon envelope-icon-newsletter">
+                <span class="fontawesome-envelope scnd-font-color"></span>
+            </div>
         </div>
         <a class="subscribe button" href="#21">SUBSCRIBE</a>
     </div>
-    <div class="account block">
+    <div style="width: 450px;" class="account block">
         <!-- ACCOUNT (RIGHT-CONTAINER) -->
-        <h2 class="titular">SIGN IN TO YOUR ACCOUNT</h2>
-        <div class="input-container">
-            <input type="text" placeholder="yourname@gmail.com" class="email text-input">
-            <div class="input-icon envelope-icon-acount"><span class="fontawesome-envelope scnd-font-color"></span></div>
-        </div>
-        <div class="input-container">
-            <input type="text" placeholder="Password" class="password text-input">
-            <div class="input-icon password-icon"><span class="fontawesome-lock scnd-font-color"></span></div>
-        </div>
-        <a class="sign-in button" href="#22">SIGN IN</a>
-        <p class="scnd-font-color">Forgot Password?</p>
-        <a class="fb-sign-in" href="58">
-            <p><span class="fb-border"><span class="icon zocial-facebook"></span></span>Sign in with Facebook</p>
-        </a>
+        <h2 class="titular">If you want to enter your another account, just do it with</h2>
+        <form  class="row g-3" style="width: 200px" asp-controller="Users" asp-action="SignIn" method="post">
+            <div >
+                <input name="Username" class="form-control"  type="text" placeholder="Username"/>
+                <span class="text-danger" asp-validation-for="Username"></span>
+            </div>
+            <div >
+                <input name="Password" class="form-control" type="text" placeholder="Password"/>
+                <span class="text-danger" asp-validation-for="Password"></span>
+            </div>
+            <button style="margin-left: 20px;" class="form-control"  type="submit" >Sign In</button>
+            <a style="margin-left: 20px;" class="link-info" asp-controller="Users" asp-action="SignUp">Sign Up</a>
+        </form>
     </div>
     <div class="loading block">
         <!-- LOADING (RIGHT-CONTAINER) -->
@@ -338,91 +396,78 @@
     <div class="calendar-day block">
         <!-- CALENDAR DAY (RIGHT-CONTAINER) -->
         <div class="arrow-btn-container">
-            <a class="arrow-btn left" href="#200"><span class="icon fontawesome-angle-left"></span></a>
+            <a class="arrow-btn left" href="#200">
+                <span class="icon fontawesome-angle-left"></span>
+            </a>
             <h2 class="titular">WEDNESDAY</h2>
-            <a class="arrow-btn right" href="#201"><span class="icon fontawesome-angle-right"></span></a>
+            <a class="arrow-btn right" href="#201">
+                <span class="icon fontawesome-angle-right"></span>
+            </a>
         </div>
         <p class="the-day">26</p>
         <a class="add-event button" href="#27">ADD EVENT</a>
     </div>
-    <div class="calendar-month block">
+    <div class="calendar-month block" style="width: 400px">
         <!-- CALENDAR MONTH (RIGHT-CONTAINER) -->
-        <div class="arrow-btn-container">
-            <a class="arrow-btn left" href="#202"><span class="icon fontawesome-angle-left"></span></a>
-            <h2 class="titular">APRIL 2013</h2>
-            <a class="arrow-btn right" href="#203"><span class="icon fontawesome-angle-right"></span></a>
+        @inject UserRepository UserRepository
+        @{
+            ViewData["Title"] = "Home Page";
+        }
+
+
+        <p  style="text-align:center "><b>Statistics</b></p>
+
+        @{
+            var users = UserRepository.GetUsers();
+            <h1>Users </h1>
+            <table class="table" style="color: antiquewhite">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">CorrectCount</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                @for (var i = 0; i < users!.Count; i++)
+                {
+                    var user = users[i];
+
+                    <tr>
+                        <th scope="row">@(i + 1)</th>
+                        <td>@user.Username</td>
+                        <td>@user.Name</td>
+                        <td>@user.Tickets.Sum(t => t.CorrectCount)</td>
+                    </tr>
+                }
+
+                </tbody>
+            </table>
+        }
+
+
+        <div class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Modal body text goes here.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
         </div>
-        <table class="calendar">
-            <thead class="days-week">
-            <tr>
-                <th>S</th>
-                <th>M</th>
-                <th>T</th>
-                <th>W</th>
-                <th>R</th>
-                <th>F</th>
-                <th>S</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><a class="scnd-font-color" href="#100">1</a></td>
-            </tr>
-            <tr>
-                <td><a class="scnd-font-color" href="#101">2</a></td>
-                <td><a class="scnd-font-color" href="#102">3</a></td>
-                <td><a class="scnd-font-color" href="#103">4</a></td>
-                <td><a class="scnd-font-color" href="#104">5</a></td>
-                <td><a class="scnd-font-color" href="#105">6</a></td>
-                <td><a class="scnd-font-color" href="#106">7</a></td>
-                <td><a class="scnd-font-color" href="#107">8</a></td>
-            </tr>
-            <tr>
-                <td><a class="scnd-font-color" href="#108">9</a></td>
-                <td><a class="scnd-font-color" href="#109">10</a></td>
-                <td><a class="scnd-font-color" href="#110">11</a></td>
-                <td><a class="scnd-font-color" href="#111">12</a></td>
-                <td><a class="scnd-font-color" href="#112">13</a></td>
-                <td><a class="scnd-font-color" href="#113">14</a></td>
-                <td><a class="scnd-font-color" href="#114">15</a></td>
-            </tr>
-            <tr>
-                <td><a class="scnd-font-color" href="#115">16</a></td>
-                <td><a class="scnd-font-color" href="#116">17</a></td>
-                <td><a class="scnd-font-color" href="#117">18</a></td>
-                <td><a class="scnd-font-color" href="#118">19</a></td>
-                <td><a class="scnd-font-color" href="#119">20</a></td>
-                <td><a class="scnd-font-color" href="#120">21</a></td>
-                <td><a class="scnd-font-color" href="#121">22</a></td>
-            </tr>
-            <tr>
-                <td><a class="scnd-font-color" href="#122">23</a></td>
-                <td><a class="scnd-font-color" href="#123">24</a></td>
-                <td><a class="scnd-font-color" href="#124">25</a></td>
-                <td><a class="today" href="#125">26</a></td>
-                <td><a href="#126">27</a></td>
-                <td><a href="#127">28</a></td>
-                <td><a href="#128">29</a></td>
-            </tr>
-            <tr>
-                <td><a href="#129">30</a></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            </tbody>
-        </table>
-    </div> <!-- end calendar-month block -->
-</div> <!-- end right-container -->
+    </div> </div><!-- end right-container -->
 </div> <!-- end main-container -->
 </div>
 </body>
