@@ -21,7 +21,8 @@ namespace Autotest.Mvc.Repositories
         {
             var command = Connection.CreateCommand();
             command.CommandText =
-                "CREATE TABLE IF NOT EXISTS users(id TEXT UNIQUE, username TEXT NOT NULL, password TEXT, name TEXT, photo_url TEXT, current_ticket_index INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 0,language TEXT)";
+                "CREATE TABLE IF NOT EXISTS users(id TEXT UNIQUE, username TEXT NOT NULL, password TEXT, name TEXT," +
+                " photo_url TEXT, current_ticket_index INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 0,language TEXT)";
             command.ExecuteNonQuery();
         }
 
@@ -29,7 +30,8 @@ namespace Autotest.Mvc.Repositories
         {
             var command = Connection.CreateCommand();
             command.CommandText =
-                "INSERT INTO users(id,username,password,name,photo_url, language) VALUES (@id,@username,@password,@name,@photo_url,@language)";
+                "INSERT INTO users(id,username,password,name,photo_url, language) " +
+                "VALUES (@id,@username,@password,@name,@photo_url,@language)";
             command.Parameters.AddWithValue("id", user.Id);
             command.Parameters.AddWithValue("username", user.Username);
             command.Parameters.AddWithValue("password", user.Password);
@@ -53,7 +55,8 @@ namespace Autotest.Mvc.Repositories
         {
             var command = Connection.CreateCommand();
             command.CommandText =
-                "UPDATE users SET username = @username, password = @password, name = @name, photo_url = @photo_url, current_ticket_index = @index WHERE id = @id";
+                "UPDATE users SET username = @username, password = @password, name = @name, " +
+                "photo_url = @photo_url, current_ticket_index = @index WHERE id = @id";
             command.Parameters.AddWithValue("id", user.Id);
             command.Parameters.AddWithValue("username", user.Name);
             command.Parameters.AddWithValue("password", user.Password);
@@ -64,12 +67,12 @@ namespace Autotest.Mvc.Repositories
             command.ExecuteNonQuery();
         }
 
-        public void UpdateUserLanguage(User user)
+        public void UpdateUserLanguage(User user,string language)
         {
             var command = Connection.CreateCommand();
             command.CommandText = "UPDATE users SET language = @language WHERE id = @id";
             command.Parameters.AddWithValue("id", user.Id);
-            command.Parameters.AddWithValue("language", user.Language);
+            command.Parameters.AddWithValue("language", language);
             command.Prepare();
             command.ExecuteNonQuery();
         }
@@ -84,8 +87,8 @@ namespace Autotest.Mvc.Repositories
             while (reader.Read())
             {
                 var user = reader.GetUser();
-                user.CurrentTicket = user.CurrentTicketIndex == null ? null : _ticketRepository.GeTicket(user.CurrentTicketIndex!.Value);
-                user.Tickets = _ticketRepository.GetTicketsList(user.Id);
+                user.CurrentTicket = user.CurrentTicketIndex == null ? null : _ticketRepository.GeTicket(user.CurrentTicketIndex!.Value,user.Language);
+                user.Tickets = _ticketRepository.GetTicketsList(user.Id,user.Language);
                 reader.Close();
                 return user;
             }
@@ -103,8 +106,8 @@ namespace Autotest.Mvc.Repositories
             {
                 var user = reader.GetUser();
 
-                user.CurrentTicket = user.CurrentTicketIndex == null ? null : _ticketRepository.GeTicket(user.CurrentTicketIndex!.Value);
-                user.Tickets = _ticketRepository.GetTicketsList(user.Id);
+                user.CurrentTicket = user.CurrentTicketIndex == null ? null : _ticketRepository.GeTicket(user.CurrentTicketIndex!.Value, user.Language);
+                user.Tickets = _ticketRepository.GetTicketsList(user.Id, user.Language);
                  users.Add(user);
             }
             reader.Close();
