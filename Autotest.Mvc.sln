@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33424.131
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autotest.Mvc", "Autotest.Mvc\Autotest.Mvc.csproj", "{CD50AC0F-9D86-4CED-B38B-3057F6AEE6B7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBase", "DataBase\DataBase.csproj", "{E6A400A4-3378-4ACB-9A08-18BDF716091F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CD50AC0F-9D86-4CED-B38B-3057F6AEE6B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD50AC0F-9D86-4CED-B38B-3057F6AEE6B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD50AC0F-9D86-4CED-B38B-3057F6AEE6B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD50AC0F-9D86-4CED-B38B-3057F6AEE6B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6A400A4-3378-4ACB-9A08-18BDF716091F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6A400A4-3378-4ACB-9A08-18BDF716091F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6A400A4-3378-4ACB-9A08-18BDF716091F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6A400A4-3378-4ACB-9A08-18BDF716091F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {22D4A7E8-1E7C-414F-A11E-A42542B5E02E}
+	EndGlobalSection
+EndGlobal
