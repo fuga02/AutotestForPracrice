@@ -5,8 +5,9 @@
 
 <h1>Profile</h1>
 
-<img alt="Profile photo" style="width: 300px; height: 300px" src="@Model.PhotoPath"/>
-
+<h1>Profile</h1><div class="profile-picture big-profile-picture clear">
+    <img width="150px" alt="@Model.Name" src="@Model.PhotoPath">
+</div>
 <h3>Name: @Model.Name</h3>
 <h3>Username: @Model.Username</h3>
 
@@ -16,12 +17,12 @@
 <h1>TotalFinishedTickets: @Model.Tickets.Count(t=>t.IsCompleted) / @QuestionService.TicketsCount</h1>
 
 @{
-    var lastweek = Model.Tickets
+    var lastWeek = Model.Tickets
         .Where(t => t.Date > DateTime.Now.AddMinutes(-2))
         .Sum(t => t.CorrectCount);
 }
 
-<h1>Last week : @lastweek</h1>
+<h1>Last week : @lastWeek</h1>
 
 @{
     var ticket = Model.Tickets.MaxBy(t => t.Date);

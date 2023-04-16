@@ -33,13 +33,13 @@ public class TicketsController : Controller
         if (user == null)
             return RedirectToAction("SignIn", "Users");
 
-        var tickets = _usersService.TicketRepository.GetTicketsList(user.Id);
+        var tickets = _usersService.TicketRepository.GetTicketsList(user.Id, user.Language);
         if (tickets[0].Id > ticketIndex && ticketIndex > tickets[^1].Id)
             return View("NotFound");
 
         user.CurrentTicketIndex = ticketIndex;
         user.CurrentTicket = user.CurrentTicketIndex == null ? null 
-            :_usersService.TicketRepository.GeTicket(user.CurrentTicketIndex!.Value);
+            :_usersService.TicketRepository.GeTicket(user.CurrentTicketIndex!.Value, user.Language);
         
         _usersService.UserRepository.UpdateUser(user);
 
@@ -68,6 +68,7 @@ public class TicketsController : Controller
         ViewBag.Question = question;
         ViewBag.IsAnswer = choiceIndex != null;
 
+        user = _usersService.GetCurrentUser(HttpContext);
         if (choiceIndex != null)
         {
             var answer = new TicketQuestionAnswer()
@@ -78,11 +79,10 @@ public class TicketsController : Controller
                 CorrectIndex = question.Choices.IndexOf(question.Choices.First(c => c.Answer))
             };
             
-            _usersService.TicketRepository.AddTicketAnswer(answer);
+            _usersService.TicketRepository.AddTicketAnswer(answer,user.Language);
 
             ViewBag.Answer = answer;
         }
-        user = _usersService.GetCurrentUser(HttpContext);
         return View(user);
     }
 

@@ -24,17 +24,15 @@ public class QuestionService
 
         switch (language)
         {
-            case "uz": jsonPath = "uzlotin.json"; break;
-            case "uzc": jsonPath = "uzkiril.json"; break;
-            case "ru": jsonPath = "rus.json"; break;
+            case "uzb": jsonPath = "uzlotin.json"; break;
+            case "krill": jsonPath = "uzkiril.json"; break;
+            case "rus": jsonPath = "rus.json"; break;
         }
 
         var path = Path.Combine("JsonData", jsonPath);
 
-        if (File.Exists(path))
-        {
-            var json = System.IO.File.ReadAllText(path);
-            Questions = JsonConvert.DeserializeObject<List<QuestionModel>>(json)!;
-        }
+        if (!File.Exists(path)) return;
+        var json = System.IO.File.ReadAllText(path);
+        Questions = JsonConvert.DeserializeObject<List<QuestionModel>>(json)!;
     }
 }

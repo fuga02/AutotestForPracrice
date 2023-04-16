@@ -29,8 +29,8 @@ public  class UsersService
             PhotoPath = SavePhoto(createUser.Photo!),
         };
         CreateUserTickets(user);
-        user.CurrentTicket = user.CurrentTicketIndex == null ? null : TicketRepository.GeTicket(user.CurrentTicketIndex!.Value);
-        user.Tickets = TicketRepository.GetTicketsList(user.Id);
+        user.CurrentTicket = user.CurrentTicketIndex == null ? null : TicketRepository.GeTicket(user.CurrentTicketIndex!.Value, user.Language);
+        user.Tickets = TicketRepository.GetTicketsList(user.Id, user.Language);
 
 
         UserRepository.AddUser(user);
@@ -79,7 +79,7 @@ public  class UsersService
         httpContext.Response.Cookies.Delete(UserIdCookieKey);
     }
 
-    private  void CreateUserTickets(User user)
+    private void CreateUserTickets(User user)
     {
         for (var i = 0; i < QuestionService.TicketsCount; i++)
         {
@@ -91,7 +91,7 @@ public  class UsersService
                 CurrentQuestionIndex = startIndex,
                 StartIndex = startIndex,
                 QuestionsCount = QuestionService.TicketQuestionsCount
-            });
+            },user.Language);
         }
     }
 

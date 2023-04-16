@@ -84,8 +84,8 @@ public class UsersController : Controller
 
         var userId = HttpContext.Request.Cookies["user_id"];
         var user = _usersService.UserRepository.GetUserById(userId!);
-        user.Language = language;
-        _usersService.UserRepository.UpdateUserLanguage(user);
-        return RedirectToAction("Index", "Home");
+        user!.Language = language;
+        _usersService.UserRepository.UpdateUserLanguage(user,language);
+        return RedirectToAction("Dashboard", "Home");
     }
 }

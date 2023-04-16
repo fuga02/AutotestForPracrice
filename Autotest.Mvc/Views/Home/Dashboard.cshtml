@@ -18,38 +18,35 @@
             <a class="header-menu-tab" asp-controller="Users" asp-action="SignUp"><span class="icon fontawesome-envelope scnd-font-color"></span>Sign Up</a>
             <a class="header-menu-number" href="#4"></a>
         </li>
-        @*<li class="flex-column">
+        <li class="flex-column">
             @{
                 var bg = "";
                 var bg1 = "";
                 var bg2 = "";
-                if (CheckDictonary.Language.ContainsKey("language"))
-                {
-                    var language = CheckDictonary.Language["language"];
-                    if (language == "uzb")
+                    if (@Model.Language == "uzb")
                     {
                         bg ="color: red";
                          bg1 = "";
                         bg2 = "";
                     }
-                    if (language == "rus")
+                    if (@Model.Language == "rus")
                     {
                         bg1 = "color: red";
                         bg = "";
                         bg2 = "";
                     }
-                    if (language == "krill")
+                    if (@Model.Language == "krill")
                     {
                         bg2 = "color: red";
                         bg = "";
                         bg1 = "";
                     }
                 }
-            }
-            <a style="@bg" asp-controller="Users" asp-action="ChooseLanguage" asp-route-language="uzb">Uzbek</a>
-            <a style="@bg1" asp-controller="Users" asp-action="ChooseLanguage" asp-route-language="rus">Russian </a>
-            <a style="@bg2" asp-controller="Users" asp-action="ChooseLanguage" asp-route-language="krill">Krill</a>
-        </li>*@
+            
+            <a style="@bg" asp-controller="Users" asp-action="ChangeLanguage" asp-route-language="uzb">Uzbek</a>
+            <a style="@bg1" asp-controller="Users" asp-action="ChangeLanguage" asp-route-language="rus">Russian </a>
+            <a style="@bg2" asp-controller="Users" asp-action="ChangeLanguage" asp-route-language="krill">Krill</a>
+        </li>
     </ul>
     <div class="profile-menu">
         <p>Me <a asp-controller="Users" asp-action="Profile"><span class="entypo-down-open scnd-font-color">

@@ -44,7 +44,8 @@ public class HomeController : Controller
         else
         {
             var userId = HttpContext.Request.Cookies["user_id"];
-            return View(_userRepository.GetUserById(userId!));
+            var user = _userRepository.GetUserById(userId!);
+            return View(user);
         }
     }
 }
